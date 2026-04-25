@@ -1,0 +1,99 @@
+﻿@model ProjetoVendaPass.Models.ViewModels.DashboardClienteViewModel
+
+@{
+    ViewData["Title"] = "Meu Dashboard";
+}
+
+<h2 class="mb-4">👤 Meu Dashboard</h2>
+
+{{!-- Cards de resumo --}}
+<div class="row g-4 mb-5">
+
+    <div class="col-md-4">
+        <div class="card text-center shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="fs-1">🛒</div>
+                <h6 class="text-muted">Total de Compras</h6>
+                <span class="fs-3 fw-bold">@Model.Compras.Count</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="fs-1">💰</div>
+                <h6 class="text-muted">Total Gasto</h6>
+                <span class="fs-3 fw-bold text-success">R$ @Model.TotalGasto.ToString("F2")</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="fs-1">📅</div>
+                <h6 class="text-muted">Última Compra</h6>
+                @if (Model.UltimaCompra != null)
+                {
+                    <span class="fs-6 fw-bold">@Model.UltimaCompra.DataCompra.ToString("dd/MM/yyyy")</span>
+                    <br />
+                    <small class="text-muted">@Model.UltimaCompra.Plano?.Nome</small>
+                }
+                else
+                {
+                    <span class="text-muted">Nenhuma ainda</span>
+                }
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{{!-- Tabela de compras --}}
+<h4 class="mb-3">📋 Histórico de Compras</h4>
+
+@if (!Model.Compras.Any())
+{
+    <div class="alert alert-info">
+        Você ainda não realizou nenhuma compra.
+        <a asp-controller="Loja" asp-action="Index">Ver planos disponíveis →</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Plano</th>
+                    <th>Data</th>
+                    <th>Valor Pago</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var compra in Model.Compras)
+                {
+                    <tr>
+                        <td>#@compra.Id</td>
+                        <td>@compra.Plano?.Nome</td>
+                        <td>@compra.DataCompra.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="text-success fw-bold">R$ @compra.ValorPago.ToString("F2")</td>
+                        <td>
+                            @if (compra.Status == ProjetoVendaPass.Models.StatusCompra.Pago)
+                            {
+                                <span class="badge bg-success">✅ Pago</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">⏳ Pendente</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

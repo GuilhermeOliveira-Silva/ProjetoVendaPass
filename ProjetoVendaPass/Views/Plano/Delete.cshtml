@@ -1,0 +1,30 @@
+﻿@model ProjetoVendaPass.Models.Plano
+
+@{
+    ViewData["Title"] = "Excluir Plano";
+}
+
+<h2>Confirmar Exclusão</h2>
+
+<p>Tem certeza que deseja excluir o plano <strong>@Model.Nome</strong>?</p>
+
+<dl class="row">
+    <dt class="col-sm-3">Nome</dt>
+    <dd class="col-sm-9">@Model.Nome</dd>
+
+    <dt class="col-sm-3">Preço</dt>
+    <dd class="col-sm-9">R$ @Model.Preco.ToString("F2")</dd>
+
+    <dt class="col-sm-3">Quantidade de Moedas</dt>
+    <dd class="col-sm-9">@Model.QuantidadeMoeda.ToString("N0")</dd>
+
+    <dt class="col-sm-3">Ativo</dt>
+    <dd class="col-sm-9">@(Model.Ativo ? "Sim" : "Não")</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

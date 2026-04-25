@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ProjetoVendaPass.Models.Plano>
+
+@{
+    ViewData["Title"] = "Planos";
+}
+
+<h2>Planos</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">+ Novo Plano</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Quantidade de Moedas</th>
+            <th>Ativo</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var plano in Model)
+        {
+            <tr>
+                <td>@plano.Nome</td>
+                <td>R$ @plano.Preco.ToString("F2")</td>
+                <td>@plano.QuantidadeMoeda.ToString("N0")</td>
+                <td>@(plano.Ativo ? "Sim" : "Não")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@plano.Id" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@plano.Id" class="btn btn-sm btn-danger">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
