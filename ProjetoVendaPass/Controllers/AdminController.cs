@@ -23,33 +23,67 @@ namespace ProjetoVendaPass.Controllers
         }
 
         // GET: /Admin
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(
+     string? filtroCliente,
+     string? filtroStatus,
+     DateTime? filtroDataInicio,
+     DateTime? filtroDataFim,
+     decimal? filtroValorMin,
+     decimal? filtroValorMax,
+     int pagina = 1)
         {
-            // Total de clientes com role "Cliente"
             var clientes = await _userManager.GetUsersInRoleAsync("Cliente");
-
-            // Total de compras
             var totalCompras = await _context.Compras.CountAsync();
-
-            // Soma total das vendas
             var totalVendas = await _context.Compras
                 .Where(c => c.Status == StatusCompra.Pago)
                 .SumAsync(c => (decimal?)c.ValorPago) ?? 0;
 
-            // Últimas 10 compras com dados do plano e cliente incluídos
-            var ultimasCompras = await _context.Compras
+            // Query base
+            var query = _context.Compras
                 .Include(c => c.Plano)
                 .Include(c => c.Cliente)
-                .OrderByDescending(c => c.DataCompra)
-                .Take(10)
-                .ToListAsync();
+                .AsQueryable();
+
+            // Filtro por cliente (nome ou email)
+            if (!string.IsNullOrEmpty(filtroCliente))
+                query = query.Where(c =>
+                    c.Cliente!.Email!.Contains(filtroCliente) ||
+                    c.Cliente!.Nome.Contains(filtroCliente));
+
+            // Filtro por status
+            if (!string.IsNullOrEmpty(filtroStatus) && Enum.TryParse<StatusCompra>(filtroStatus, out var status))
+                query = query.Where(c => c.Status == status);
+
+            // Filtro por data
+            if (filtroDataInicio.HasValue)
+                query = query.Where(c => c.DataCompra >= filtroDataInicio.Value);
+            if (filtroDataFim.HasValue)
+                query = query.Where(c => c.DataCompra <= filtroDataFim.Value.AddDays(1));
+
+            // Filtro por valor
+            if (filtroValorMin.HasValue)
+                query = query.Where(c => c.ValorPago >= filtroValorMin.Value);
+            if (filtroValorMax.HasValue)
+                query = query.Where(c => c.ValorPago <= filtroValorMax.Value);
+
+            var lista = await query
+              .OrderByDescending(c => c.DataCompra)
+              .ToListAsync();
+
+            var comprasPaginadas = lista.ToPagedList(pagina, 10);
 
             var viewModel = new DashboardViewModel
             {
                 TotalClientes = clientes.Count,
                 TotalCompras = totalCompras,
                 TotalVendas = totalVendas,
-                UltimasCompras = ultimasCompras
+                UltimasCompras = comprasPaginadas,
+                FiltroCliente = filtroCliente,
+                FiltroStatus = filtroStatus,
+                FiltroDataInicio = filtroDataInicio,
+                FiltroDataFim = filtroDataFim,
+                FiltroValorMin = filtroValorMin,
+                FiltroValorMax = filtroValorMax
             };
 
             return View(viewModel);

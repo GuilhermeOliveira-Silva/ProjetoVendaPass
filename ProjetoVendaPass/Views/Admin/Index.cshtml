@@ -1,4 +1,6 @@
-﻿@model ProjetoVendaPass.Models.ViewModels.DashboardViewModel
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+@model ProjetoVendaPass.Models.ViewModels.DashboardViewModel
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -8,85 +10,188 @@
 <p class="vp-page-subtitle">Visão geral em tempo real da sua operação.</p>
 
 <!-- Cards de resumo -->
-<div class="row g-4 mb-5">
-
+<div class="row g-4 mb-4 vp-dashboard-cards">
     <div class="col-md-4">
         <div class="vp-stat-card">
             <div class="vp-stat-value info">@Model.TotalClientes</div>
             <div class="vp-stat-label">👤 Clientes Cadastrados</div>
         </div>
     </div>
-
     <div class="col-md-4">
         <div class="vp-stat-card">
             <div class="vp-stat-value success">@Model.TotalCompras</div>
             <div class="vp-stat-label">🛒 Total de Compras</div>
         </div>
     </div>
-
     <div class="col-md-4">
         <div class="vp-stat-card">
             <div class="vp-stat-value accent">R$ @Model.TotalVendas.ToString("F2")</div>
             <div class="vp-stat-label">💰 Vendas Pagas</div>
         </div>
     </div>
-
 </div>
 
-<!-- Últimas compras -->
-<h4 class="vp-section-title">🕐 Últimas Compras</h4>
-
-@if (!Model.UltimasCompras.Any())
-{
-    <div class="vp-alert">Nenhuma compra registrada ainda.</div>
-}
-else
-{
-    <div class="vp-table-wrap">
-        <table class="vp-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Cliente</th>
-                    <th>Plano</th>
-                    <th>Valor</th>
-                    <th>Data</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var compra in Model.UltimasCompras)
-                {
-                    <tr>
-                        <td>@compra.Id</td>
-                        <td>@compra.Cliente?.Email</td>
-                        <td>@compra.Plano?.Nome</td>
-                        <td><strong>R$ @compra.ValorPago.ToString("F2")</strong></td>
-                        <td>@compra.DataCompra.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>
-                            @if (compra.Status == ProjetoVendaPass.Models.StatusCompra.Pago)
-                            {
-                                <span class="vp-badge vp-badge-success">✅ Pago</span>
-                            }
-                            else
-                            {
-                                <span class="vp-badge vp-badge-pending">⏳ Pendente</span>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-}
-
 <!-- Links rápidos -->
-<div class="mt-4 d-flex gap-2 flex-wrap">
+<div class="mb-4 d-flex gap-2 flex-wrap">
     <a asp-controller="Plano" asp-action="Index" class="vp-btn vp-btn-primary">
         📦 Gerenciar Planos
     </a>
-
     <a asp-controller="Admin" asp-action="Clientes" class="vp-btn">
         👥 Ver Clientes
     </a>
+</div>
+
+<!-- Painel unificado: filtros + vendas -->
+<div class="vp-card vp-admin-sales-panel mb-4">
+    <div class="vp-admin-sales-panel__head">
+        <div>
+            <h4 class="vp-admin-sales-panel__title">Filtro de vendas</h4>
+            <p class="vp-admin-sales-panel__sub">Filtre e acompanhe as vendas em um único painel.</p>
+        </div>
+        @if (Model.UltimasCompras.Any())
+        {
+            <span class="vp-badge vp-badge-muted">
+                @Model.UltimasCompras.TotalItemCount resultado(s) — página @Model.UltimasCompras.PageNumber de @Model.UltimasCompras.PageCount
+            </span>
+        }
+    </div>
+
+    <form asp-action="Index" method="get" class="vp-admin-sales-panel__filters">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="vp-label">Cliente</label>
+                <input type="text"
+                       name="filtroCliente"
+                       value="@Model.FiltroCliente"
+                       class="vp-input"
+                       placeholder="Nome ou email" />
+            </div>
+
+            <div class="col-md-2">
+                <label class="vp-label">Status</label>
+                <select name="filtroStatus" class="vp-select">
+                    <option value="">Todos</option>
+                    <option value="Pendente" selected="@(Model.FiltroStatus == "Pendente")">⏳ Pendente</option>
+                    <option value="Pago" selected="@(Model.FiltroStatus == "Pago")">✅ Pago</option>
+                    <option value="Expirado" selected="@(Model.FiltroStatus == "Expirado")">❌ Expirado</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="vp-label">De</label>
+                <input type="date"
+                       name="filtroDataInicio"
+                       value="@Model.FiltroDataInicio?.ToString("yyyy-MM-dd")"
+                       class="vp-input" />
+            </div>
+
+            <div class="col-md-2">
+                <label class="vp-label">Até</label>
+                <input type="date"
+                       name="filtroDataFim"
+                       value="@Model.FiltroDataFim?.ToString("yyyy-MM-dd")"
+                       class="vp-input" />
+            </div>
+
+@*             <div class="col-md-1">
+                <label class="vp-label">Valor mín.</label>
+                <input type="number"
+                       name="filtroValorMin"
+                       value="@Model.FiltroValorMin"
+                       class="vp-input"
+                       placeholder="0"
+                       step="0.01" />
+            </div>
+
+            <div class="col-md-1">
+                <label class="vp-label">Valor máx.</label>
+                <input type="number"
+                       name="filtroValorMax"
+                       value="@Model.FiltroValorMax"
+                       class="vp-input"
+                       placeholder="999"
+                       step="0.01" />
+            </div> *@
+        </div>
+
+        <div class="vp-admin-sales-panel__actions">
+            <button type="submit" class="vp-btn vp-btn-primary">Filtrar</button>
+            <a asp-action="Index" class="vp-btn vp-btn-ghost">Limpar</a>
+        </div>
+    </form>
+
+    <div class="vp-admin-sales-panel__divider"></div>
+
+    <h4 class="vp-dashboard-panel__title">Vendas</h4>
+    <p class="vp-dashboard-panel__sub">Acompanhe suas vendas no painel.</p>
+
+    @if (!Model.UltimasCompras.Any())
+    {
+        <div class="vp-alert">Nenhuma venda encontrada com os filtros aplicados.</div>
+    }
+    else
+    {
+        <div class="vp-table-wrap">
+            <table class="vp-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cliente</th>
+                        <th>Plano</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var compra in Model.UltimasCompras)
+                    {
+                        <tr>
+                            <td>@compra.Id</td>
+                            <td>@compra.Cliente?.Email</td>
+                            <td>@compra.Plano?.Nome</td>
+                            <td><strong>R$ @compra.ValorPago.ToString("F2")</strong></td>
+                            <td>@compra.DataCompra.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                @if (compra.Status == ProjetoVendaPass.Models.StatusCompra.Pago)
+                                {
+                                    <span class="vp-badge vp-badge-success">✅ Pago</span>
+                                }
+                                else if (compra.Status == ProjetoVendaPass.Models.StatusCompra.Expirado)
+                                {
+                                    <span class="vp-badge vp-badge-danger">❌ Expirado</span>
+                                }
+                                else
+                                {
+                                    <span class="vp-badge vp-badge-pending">⏳ Pendente</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-center mt-3">
+            @Html.PagedListPager(Model.UltimasCompras, pagina => Url.Action("Index", new
+            {
+                pagina,
+                filtroCliente = Model.FiltroCliente,
+                filtroStatus = Model.FiltroStatus,
+                filtroDataInicio = Model.FiltroDataInicio?.ToString("yyyy-MM-dd"),
+                filtroDataFim = Model.FiltroDataFim?.ToString("yyyy-MM-dd"),
+                filtroValorMin = Model.FiltroValorMin,
+                filtroValorMax = Model.FiltroValorMax
+                }),
+                new PagedListRenderOptions
+                {
+                    LiElementClasses = new[] { "page-item" },
+                    PageClasses = new[] { "page-link" },
+                    UlElementClasses = new[] { "pagination" },
+                    ActiveLiElementClass = "active",
+                    DisplayLinkToFirstPage = PagedListDisplayMode.Never,
+                    DisplayLinkToLastPage = PagedListDisplayMode.Never
+                })
+    </div>
+        }
 </div>

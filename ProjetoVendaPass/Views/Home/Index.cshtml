@@ -3,48 +3,54 @@
 }
 
 <section class="vp-hero">
-    <div class="vp-hero-inner">
-        <span class="vp-pill">
-            <span class="vp-pill-dot"></span>
+    <div class="vp-hero__inner">
+        <span class="vp-hero__badge">
+            <span class="vp-hero__badge-dot"></span>
             Plataforma oficial de passes de jogos
         </span>
-        <h1>
-            Seu próximo <span class="vp-accent">game pass</span><br />
+
+        <h1 class="vp-hero__title">
+            Seu próximo <span class="vp-hero__title-accent">game pass</span>
             entregue em segundos.
         </h1>
-        <p class="lead">
+
+        <p class="vp-hero__subtitle">
             Compre passes, créditos e cartões de jogos com pagamento seguro,
             entrega instantânea e o melhor preço do mercado.
         </p>
-        <div class="vp-cta-row">
-            <a asp-controller="Loja" asp-action="Index" class="vp-btn vp-btn-primary">
-                Explorar Loja →
-            </a>
-            <a asp-controller="Home" asp-action="Privacy" class="vp-btn vp-btn-ghost">
-                Como funciona
-            </a>
+
+        <div class="vp-hero__cta">
+            <a href="/Loja" class="vp-btn vp-btn--primary">Explorar Loja →</a>
+            <a href="#como-funciona" class="vp-hero__link">Como funciona</a>
         </div>
     </div>
 
-    <div class="vp-stats">
-        <div class="vp-stat">
-            <div class="vp-stat-num">+50k</div>
-            <div class="vp-stat-label">Clientes ativos</div>
-        </div>
-        <div class="vp-stat">
-            <div class="vp-stat-num">99.9%</div>
-            <div class="vp-stat-label">Entregas no prazo</div>
-        </div>
-        <div class="vp-stat">
-            <div class="vp-stat-num">24/7</div>
-            <div class="vp-stat-label">Suporte ativo</div>
-        </div>
-        <div class="vp-stat">
-            <div class="vp-stat-num">100%</div>
-            <div class="vp-stat-label">Pagamento seguro</div>
+    <!-- Carrossel infinito de stats -->
+    <div class="vp-stats-marquee" aria-hidden="false">
+        <div class="vp-stats-marquee__track">
+            <!-- Grupo 1 -->
+            <div class="vp-stat-card"><div class="vp-stat-card__value">+50k</div><div class="vp-stat-card__label">Clientes ativos</div></div>
+            <div class="vp-stat-card"><div class="vp-stat-card__value">99.9%</div><div class="vp-stat-card__label">Entregas no prazo</div></div>
+            <div class="vp-stat-card"><div class="vp-stat-card__value">24/7</div><div class="vp-stat-card__label">Suporte ativo</div></div>
+            <div class="vp-stat-card"><div class="vp-stat-card__value">100%</div><div class="vp-stat-card__label">Pagamento seguro</div></div>
+            <div class="vp-stat-card"><div class="vp-stat-card__value">+1M</div><div class="vp-stat-card__label">Pedidos entregues</div></div>
+            <div class="vp-stat-card"><div class="vp-stat-card__value">+200</div><div class="vp-stat-card__label">Jogos disponíveis</div></div>
+            <div class="vp-stat-card"><div class="vp-stat-card__value">4.9★</div><div class="vp-stat-card__label">Avaliação média</div></div>
+            <div class="vp-stat-card"><div class="vp-stat-card__value">&lt;30s</div><div class="vp-stat-card__label">Tempo de entrega</div></div>
+
+            <!-- Grupo 2 (DUPLICADO — necessário para loop infinito sem corte) -->
+            <div class="vp-stat-card" aria-hidden="true"><div class="vp-stat-card__value">+50k</div><div class="vp-stat-card__label">Clientes ativos</div></div>
+            <div class="vp-stat-card" aria-hidden="true"><div class="vp-stat-card__value">99.9%</div><div class="vp-stat-card__label">Entregas no prazo</div></div>
+            <div class="vp-stat-card" aria-hidden="true"><div class="vp-stat-card__value">24/7</div><div class="vp-stat-card__label">Suporte ativo</div></div>
+            <div class="vp-stat-card" aria-hidden="true"><div class="vp-stat-card__value">100%</div><div class="vp-stat-card__label">Pagamento seguro</div></div>
+            <div class="vp-stat-card" aria-hidden="true"><div class="vp-stat-card__value">+1M</div><div class="vp-stat-card__label">Pedidos entregues</div></div>
+            <div class="vp-stat-card" aria-hidden="true"><div class="vp-stat-card__value">+200</div><div class="vp-stat-card__label">Jogos disponíveis</div></div>
+            <div class="vp-stat-card" aria-hidden="true"><div class="vp-stat-card__value">4.9★</div><div class="vp-stat-card__label">Avaliação média</div></div>
+            <div class="vp-stat-card" aria-hidden="true"><div class="vp-stat-card__value">&lt;30s</div><div class="vp-stat-card__label">Tempo de entrega</div></div>
         </div>
     </div>
 </section>
+
 
 <section class="vp-section">
     <div class="vp-section-head">
