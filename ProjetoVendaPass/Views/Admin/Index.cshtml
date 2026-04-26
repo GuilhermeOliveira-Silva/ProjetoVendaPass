@@ -1,0 +1,92 @@
+﻿@model ProjetoVendaPass.Models.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2 class="vp-page-title">📊 Dashboard Administrativo</h2>
+<p class="vp-page-subtitle">Visão geral em tempo real da sua operação.</p>
+
+<!-- Cards de resumo -->
+<div class="row g-4 mb-5">
+
+    <div class="col-md-4">
+        <div class="vp-stat-card">
+            <div class="vp-stat-value info">@Model.TotalClientes</div>
+            <div class="vp-stat-label">👤 Clientes Cadastrados</div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="vp-stat-card">
+            <div class="vp-stat-value success">@Model.TotalCompras</div>
+            <div class="vp-stat-label">🛒 Total de Compras</div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="vp-stat-card">
+            <div class="vp-stat-value accent">R$ @Model.TotalVendas.ToString("F2")</div>
+            <div class="vp-stat-label">💰 Vendas Pagas</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Últimas compras -->
+<h4 class="vp-section-title">🕐 Últimas Compras</h4>
+
+@if (!Model.UltimasCompras.Any())
+{
+    <div class="vp-alert">Nenhuma compra registrada ainda.</div>
+}
+else
+{
+    <div class="vp-table-wrap">
+        <table class="vp-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Cliente</th>
+                    <th>Plano</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var compra in Model.UltimasCompras)
+                {
+                    <tr>
+                        <td>@compra.Id</td>
+                        <td>@compra.Cliente?.Email</td>
+                        <td>@compra.Plano?.Nome</td>
+                        <td><strong>R$ @compra.ValorPago.ToString("F2")</strong></td>
+                        <td>@compra.DataCompra.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @if (compra.Status == ProjetoVendaPass.Models.StatusCompra.Pago)
+                            {
+                                <span class="vp-badge vp-badge-success">✅ Pago</span>
+                            }
+                            else
+                            {
+                                <span class="vp-badge vp-badge-pending">⏳ Pendente</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<!-- Links rápidos -->
+<div class="mt-4 d-flex gap-2 flex-wrap">
+    <a asp-controller="Plano" asp-action="Index" class="vp-btn vp-btn-primary">
+        📦 Gerenciar Planos
+    </a>
+
+    <a asp-controller="Admin" asp-action="Clientes" class="vp-btn">
+        👥 Ver Clientes
+    </a>
+</div>

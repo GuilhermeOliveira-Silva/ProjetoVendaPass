@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ProjetoVendaPass.Models.Compra>
+
+@{
+    ViewData["Title"] = "Minhas Compras";
+}
+
+<div class="vp-page-header mb-4">
+    <span class="vp-eyebrow">🛒 Histórico</span>
+    <h1 class="vp-page-title">Minhas <span class="vp-text-accent">Compras</span></h1>
+    <p class="vp-page-subtitle">Acompanhe todos os seus pedidos em um só lugar.</p>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="vp-empty-state">
+        <div class="vp-empty-icon">📭</div>
+        <h3>Você ainda não realizou nenhuma compra</h3>
+        <p>Que tal explorar nossos planos e dar o primeiro passo?</p>
+        <a asp-action="Index" class="vp-btn vp-btn-primary mt-3">Ver Planos</a>
+    </div>
+}
+else
+{
+    <div class="vp-table-wrap">
+        <table class="vp-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Plano</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var compra in Model)
+                {
+                    <tr>
+                        <td><span class="vp-id-pill">#@compra.Id</span></td>
+                        <td class="fw-semibold">@compra.Plano?.Nome</td>
+                        <td class="vp-text-accent fw-bold">R$ @compra.ValorPago.ToString("F2")</td>
+                        <td>@compra.DataCompra.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @if (compra.Status == ProjetoVendaPass.Models.StatusCompra.Pago)
+                            {
+                                <span class="vp-badge vp-badge-success">✅ Pago</span>
+                            }
+                            else
+                            {
+                                <span class="vp-badge vp-badge-pending">⏳ Pendente</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Detalhes" asp-route-id="@compra.Id" class="vp-btn vp-btn-ghost vp-btn-sm">
+                                🔍 Ver
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="vp-btn vp-btn-primary">
+            🛒 Ver mais planos
+        </a>
+    </div>
+}

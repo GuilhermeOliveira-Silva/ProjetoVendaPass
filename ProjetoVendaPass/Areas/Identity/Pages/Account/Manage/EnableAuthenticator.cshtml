@@ -1,0 +1,71 @@
+﻿@page
+@model EnableAuthenticatorModel
+@{
+    ViewData["Title"] = "Configurar aplicativo autenticador";
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<div class="vp-page-header">
+    <h3 class="vp-page-title">@ViewData["Title"]</h3>
+    <p class="vp-page-sub">Vincule um app autenticador em poucos passos</p>
+</div>
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="vp-card vp-form-card">
+    <ol class="vp-steps">
+        <li>
+            <p>
+                Baixe um aplicativo autenticador de dois fatores como o <strong>Microsoft Authenticator</strong> para
+                <a href="https://go.microsoft.com/fwlink/?Linkid=825072">Android</a> e
+                <a href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</a>, ou o
+                <strong>Google Authenticator</strong> para
+                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=pt_BR">Android</a> e
+                <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">iOS</a>.
+            </p>
+        </li>
+
+        <li>
+            <p>
+                Escaneie o QR Code ou insira esta chave no seu aplicativo autenticador.
+                Espaços e capitalização não importam.
+            </p>
+            <div class="vp-key"><kbd>@Model.SharedKey</kbd></div>
+
+            <div class="vp-alert vp-alert-info">
+                Saiba como <a href="https://go.microsoft.com/fwlink/?Linkid=852423">ativar a geração de QR Code</a>.
+            </div>
+
+            <div class="vp-qr">
+                <div id="qrCode"></div>
+                <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
+            </div>
+        </li>
+
+        <li>
+            <p>
+                Após escanear o QR Code, seu aplicativo fornecerá um código único.
+                Insira o código abaixo para confirmar.
+            </p>
+
+            <form id="send-code" method="post" class="vp-form">
+                <div class="vp-field">
+                    <label asp-for="Input.Code" class="vp-label">Código de verificação</label>
+                    <input asp-for="Input.Code" class="vp-input"
+                           autocomplete="off" placeholder="000000" />
+                    <span asp-validation-for="Input.Code" class="vp-error"></span>
+                </div>
+
+                <button type="submit" class="vp-btn vp-btn-primary vp-btn-block">
+                    Verificar
+                </button>
+
+                <div asp-validation-summary="ModelOnly" class="vp-alert vp-alert-danger" role="alert"></div>
+            </form>
+        </li>
+    </ol>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

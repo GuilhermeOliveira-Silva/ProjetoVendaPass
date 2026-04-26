@@ -1,0 +1,63 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Criar conta";
+}
+
+<section class="vp-auth">
+    <div class="vp-auth-card">
+        <div class="vp-auth-header">
+            <div class="vp-auth-badge">🎮 VendaPass</div>
+            <h1 class="vp-auth-title">Crie sua conta</h1>
+            <p class="vp-auth-sub">Cadastre-se em segundos e comece agora</p>
+        </div>
+
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="vp-auth-form">
+            <div asp-validation-summary="ModelOnly" class="vp-alert vp-alert-danger" role="alert"></div>
+
+            <div class="vp-field">
+                <label asp-for="Input.Nome" class="vp-label"></label>
+                <input asp-for="Input.Nome" class="vp-input"
+                       autocomplete="name" aria-required="true"
+                       placeholder="Seu nome completo" />
+                <span asp-validation-for="Input.Nome" class="vp-error"></span>
+            </div>
+
+            <div class="vp-field">
+                <label asp-for="Input.Email" class="vp-label"></label>
+                <input asp-for="Input.Email" class="vp-input"
+                       autocomplete="username" aria-required="true"
+                       placeholder="seu@email.com" />
+                <span asp-validation-for="Input.Email" class="vp-error"></span>
+            </div>
+
+            <div class="vp-field">
+                <label asp-for="Input.Password" class="vp-label"></label>
+                <input asp-for="Input.Password" class="vp-input"
+                       autocomplete="new-password" aria-required="true"
+                       placeholder="••••••••" />
+                <span asp-validation-for="Input.Password" class="vp-error"></span>
+            </div>
+
+            <div class="vp-field">
+                <label asp-for="Input.ConfirmPassword" class="vp-label"></label>
+                <input asp-for="Input.ConfirmPassword" class="vp-input"
+                       autocomplete="new-password" aria-required="true"
+                       placeholder="Confirme sua senha" />
+                <span asp-validation-for="Input.ConfirmPassword" class="vp-error"></span>
+            </div>
+
+            <button id="registerSubmit" type="submit" class="vp-btn vp-btn-primary vp-btn-block">
+                Criar conta →
+            </button>
+
+            <div class="vp-auth-links">
+                <span>Já tem uma conta? <a asp-page="./Login">Entrar</a></span>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

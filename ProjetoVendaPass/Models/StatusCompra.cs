@@ -3,6 +3,7 @@
     public enum StatusCompra
     {
         Pendente,
-        Pago
+        Pago,
+        Expirado 
     }
 }

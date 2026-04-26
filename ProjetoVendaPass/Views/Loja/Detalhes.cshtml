@@ -1,0 +1,54 @@
+﻿@model ProjetoVendaPass.Models.Compra
+
+@{
+    ViewData["Title"] = "Detalhes da Compra";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-7 col-md-9">
+
+        <div class="vp-detail-card">
+            <div class="vp-detail-header">
+                <div>
+                    <span class="vp-eyebrow">🧾 Pedido</span>
+                    <h2 class="vp-detail-title">Compra <span class="vp-text-accent">#@Model.Id</span></h2>
+                </div>
+                @if (Model.Status == ProjetoVendaPass.Models.StatusCompra.Pago)
+                {
+                    <span class="vp-badge vp-badge-success">✅ Pago</span>
+                }
+                else
+                {
+                    <span class="vp-badge vp-badge-pending">⏳ Pendente</span>
+                }
+            </div>
+
+            <div class="vp-detail-body">
+                <div class="vp-detail-row">
+                    <span class="vp-detail-label">Plano</span>
+                    <span class="vp-detail-value fw-semibold">@Model.Plano?.Nome</span>
+                </div>
+                <div class="vp-detail-row">
+                    <span class="vp-detail-label">Valor Pago</span>
+                    <span class="vp-detail-value vp-text-accent fw-bold fs-4">
+                        R$ @Model.ValorPago.ToString("F2")
+                    </span>
+                </div>
+                <div class="vp-detail-row">
+                    <span class="vp-detail-label">Data da Compra</span>
+                    <span class="vp-detail-value">@Model.DataCompra.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+            </div>
+
+            <div class="vp-detail-footer">
+                <a asp-action="MinhasCompras" class="vp-btn vp-btn-ghost">
+                    ← Minhas Compras
+                </a>
+                <a asp-action="Index" class="vp-btn vp-btn-primary">
+                    🛒 Ver Planos
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>

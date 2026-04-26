@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ProjetoVendaPass.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+<h2 class="vp-page-title">👥 Clientes Cadastrados</h2>
+<p class="vp-page-subtitle">Gerencie e acompanhe todos os clientes da plataforma.</p>
+
+@if (!Model.Any())
+{
+    <div class="vp-alert">Nenhum cliente cadastrado ainda.</div>
+}
+else
+{
+    <div class="vp-table-wrap">
+        <table class="vp-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th style="width: 1%; white-space: nowrap;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cliente in Model)
+                {
+                    <tr>
+                        <td><strong>@cliente.Nome</strong></td>
+                        <td>@cliente.Email</td>
+                        <td>
+                            <a asp-action="DashboardCliente"
+                               asp-route-id="@cliente.Id"
+                               class="vp-btn vp-btn-sm">
+                                📊 Ver Dashboard
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div class="mt-4">
+    <a asp-action="Index" class="vp-btn vp-btn-ghost">← Voltar ao Dashboard</a>
+</div>

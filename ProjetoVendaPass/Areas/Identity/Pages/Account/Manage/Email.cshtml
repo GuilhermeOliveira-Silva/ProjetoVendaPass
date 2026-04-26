@@ -1,0 +1,60 @@
+﻿@page
+@model EmailModel
+@{
+    ViewData["Title"] = "Gerenciar Email";
+    ViewData["ActivePage"] = ManageNavPages.Email;
+}
+
+<div class="vp-page-header">
+    <h3 class="vp-page-title">@ViewData["Title"]</h3>
+    <p class="vp-page-sub">Atualize ou confirme seu endereço de email</p>
+</div>
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="vp-card vp-form-card">
+    <form id="email-form" method="post" class="vp-form">
+        <div asp-validation-summary="All" class="vp-alert vp-alert-danger" role="alert"></div>
+
+        @if (Model.IsEmailConfirmed)
+        {
+            <div class="vp-field">
+                <label asp-for="Email" class="vp-label"></label>
+                <div class="vp-input-group">
+                    <input asp-for="Email" class="vp-input" placeholder="Seu email" disabled />
+                    <span class="vp-input-suffix vp-input-suffix-success" title="Email confirmado">✓</span>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="vp-field">
+                <label asp-for="Email" class="vp-label"></label>
+                <input asp-for="Email" class="vp-input" placeholder="Seu email" disabled />
+                <button id="email-verification" type="submit"
+                        asp-page-handler="SendVerificationEmail"
+                        class="vp-btn-link">
+                    Enviar email de verificação
+                </button>
+            </div>
+        }
+
+        <div class="vp-field">
+            <label asp-for="Input.NewEmail" class="vp-label"></label>
+            <input asp-for="Input.NewEmail" class="vp-input"
+                   autocomplete="email" aria-required="true"
+                   placeholder="novo@email.com" />
+            <span asp-validation-for="Input.NewEmail" class="vp-error"></span>
+        </div>
+
+        <button id="change-email-button" type="submit"
+                asp-page-handler="ChangeEmail"
+                class="vp-btn vp-btn-primary vp-btn-block">
+            Alterar Email
+        </button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

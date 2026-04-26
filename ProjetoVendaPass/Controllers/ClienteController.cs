@@ -20,30 +20,30 @@ namespace ProjetoVendaPass.Controllers
             _userManager = userManager;
         }
 
-        // GET: /Cliente/Dashboard
-        public async Task<IActionResult> Dashboard()
-        {
-            // Pega o usuário logado
-            var usuario = await _userManager.GetUserAsync(User);
-            if (usuario == null)
-                return Unauthorized();
+        //// GET: /Cliente/Dashboard
+        //public async Task<IActionResult> Dashboard()
+        //{
+        //    // Pega o usuário logado
+        //    var usuario = await _userManager.GetUserAsync(User);
+        //    if (usuario == null)
+        //        return Unauthorized();
 
-            // Busca apenas as compras do usuário logado
-            var compras = await _context.Compras
-                .Include(c => c.Plano)
-                .Where(c => c.ClienteId == usuario.Id)
-                .OrderByDescending(c => c.DataCompra)
-                .ToListAsync();
+        //    // Busca apenas as compras do usuário logado
+        //    var compras = await _context.Compras
+        //        .Include(c => c.Plano)
+        //        .Where(c => c.ClienteId == usuario.Id)
+        //        .OrderByDescending(c => c.DataCompra)
+        //        .ToListAsync();
 
-            // ViewModel
-            var viewModel = new DashboardClienteViewModel
-            {
-                Compras = compras,
-                TotalGasto = compras.Sum(c => c.ValorPago),
-                UltimaCompra = compras.FirstOrDefault()
-            };
+        //    // ViewModel
+        //    var viewModel = new DashboardClienteViewModel
+        //    {
+        //        Compras = compras,
+        //        TotalGasto = compras.Sum(c => c.ValorPago),
+        //        UltimaCompra = compras.FirstOrDefault()
+        //    };
 
-            return View(viewModel);
-        }
+        //    return View(viewModel);
+        //}
     }
 }

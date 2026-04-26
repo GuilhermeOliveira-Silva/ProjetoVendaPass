@@ -4,50 +4,55 @@
     ViewData["Title"] = "Loja de Passes";
 }
 
-<div class="text-center mb-5">
-    <h1 class="display-5 fw-bold">🎮 Loja de Passes</h1>
-    <p class="text-muted">Escolha o melhor pacote para você e aproveite!</p>
+<div class="vp-page-header text-center mb-5">
+    <h1 class="vp-page-title">Loja de <span class="vp-text-accent">Passes</span></h1>
+    <p class="vp-page-subtitle">
+        Escolha o melhor pacote para você, recarregue suas moedas e domine o jogo.
+    </p>
 </div>
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info text-center">
+    <div class="vp-alert vp-alert-info text-center">
         Nenhum plano disponível no momento. Volte em breve!
     </div>
 }
 else
 {
-    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
         @foreach (var plano in Model)
         {
             <div class="col">
-                <div class="card h-100 shadow-sm border-0">
-                    <div class="card-body text-center d-flex flex-column">
+                <div class="vp-plan-card h-100">
+                    <div class="vp-plan-glow"></div>
 
-                        <h5 class="card-title fw-bold fs-4">@plano.Nome</h5>
-
-                        <p class="text-muted mb-1">
-                            <i class="bi bi-coin"></i>
-                            @plano.QuantidadeMoeda.ToString("N0") moedas
+                    <div class="vp-plan-header">
+                        <div class="vp-plan-icon">🪙</div>
+                        <h3 class="vp-plan-name">@plano.Nome</h3>
+                        <p class="vp-plan-coins">
+                            <strong>@plano.QuantidadeMoeda.ToString("N0")</strong>
+                            <span>moedas</span>
                         </p>
-
-                        <div class="my-3">
-                            <span class="fs-2 fw-bold text-success">
-                                R$ @plano.Preco.ToString("F2")
-                            </span>
-                        </div>
-
-                        <div class="mt-auto">
-                            <form asp-action="Comprar" asp-controller="Loja" method="post">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="planoId" value="@plano.Id" />
-                                <button type="submit" class="btn btn-success w-100 fw-bold">
-                                    🛒 Comprar
-                                </button>
-                            </form>
-                        </div>
-
                     </div>
+
+                    <div class="vp-plan-price">
+                        <span class="vp-plan-currency">R$</span>
+                        <span class="vp-plan-value">@plano.Preco.ToString("F2")</span>
+                    </div>
+
+                    <ul class="vp-plan-features">
+                        <li>✓ Entrega instantânea</li>
+                        <li>✓ Suporte 24/7</li>
+                        <li>✓ Pagamento seguro</li>
+                    </ul>
+
+                    <form asp-action="Comprar" asp-controller="Loja" method="post" class="mt-auto">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="planoId" value="@plano.Id" />
+                        <button type="submit" class="vp-btn vp-btn-primary w-100">
+                            🛒 Comprar agora
+                        </button>
+                    </form>
                 </div>
             </div>
         }

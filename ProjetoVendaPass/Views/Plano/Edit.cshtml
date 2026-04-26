@@ -4,36 +4,57 @@
     ViewData["Title"] = "Editar Plano";
 }
 
-<h2>Editar Plano</h2>
+<div class="container py-4" style="max-width:680px;">
 
-<form asp-action="Edit" method="post">
-    @Html.AntiForgeryToken()
-
-    <input type="hidden" asp-for="Id" />
-
-    <div class="mb-3">
-        <label asp-for="Nome" class="form-label"></label>
-        <input asp-for="Nome" class="form-control" />
-        <span asp-validation-for="Nome" class="text-danger"></span>
+    <div class="vp-page-header">
+        <h1 style="color:#fff; font-weight:800; margin:0;">✏️ Editar Plano</h1>
+        <div style="color:var(--vp-text-muted); margin-top:.35rem;">
+            Atualize as informações do passe <strong style="color:var(--vp-accent);">@Model.Nome</strong>.
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Preco" class="form-label"></label>
-        <input asp-for="Preco" class="form-control" />
-        <span asp-validation-for="Preco" class="text-danger"></span>
-    </div>
+    <div class="vp-detail-card">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
 
-    <div class="mb-3">
-        <label asp-for="QuantidadeMoeda" class="form-label"></label>
-        <input asp-for="QuantidadeMoeda" class="form-control" />
-        <span asp-validation-for="QuantidadeMoeda" class="text-danger"></span>
-    </div>
+            <div class="mb-3">
+                <label asp-for="Nome" class="vp-label"></label>
+                <input asp-for="Nome" class="vp-input" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
 
-    <div class="mb-3 form-check">
-        <input asp-for="Ativo" class="form-check-input" />
-        <label asp-for="Ativo" class="form-check-label"></label>
-    </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Preco" class="vp-label">Preço (R$)</label>
+                    <input asp-for="Preco" class="vp-input" />
+                    <span asp-validation-for="Preco" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="QuantidadeMoeda" class="vp-label">Qtd. Moedas</label>
+                    <input asp-for="QuantidadeMoeda" class="vp-input" />
+                    <span asp-validation-for="QuantidadeMoeda" class="text-danger"></span>
+                </div>
+            </div>
 
-    <button type="submit" class="btn btn-warning">Salvar Alterações</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+            <div class="mb-4">
+                <label class="vp-check">
+                    <input asp-for="Ativo" />
+                    <span>Plano ativo (visível na loja)</span>
+                </label>
+            </div>
+
+            <div style="display:flex; gap:.75rem; flex-wrap:wrap;">
+                <button type="submit" class="vp-btn vp-btn-primary">💾 Salvar Alterações</button>
+                <a asp-action="Index" class="vp-btn vp-btn-ghost">← Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

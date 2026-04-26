@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using ProjetoVendaPass.Data;
+using ProjetoVendaPass.Filters;
 using ProjetoVendaPass.Models;
+using ProjetoVendaPass.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,15 +17,32 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Configura o Identity para usar ApplicationUser e IdentityRole, e o Entity Framework para armazenar os dados
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>()                    
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true; 
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    //options.Filters.Add<DiscordIdObrigatorioFilter>();
+});
+
+builder.Services.AddScoped<DiscordIdObrigatorioFilter>();
+
+// Registra as configurações de email
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
+
+// Registra o EmailSender
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
-// Rodar o seed de roles e usu�rio admin
+
+
+// Rodar o seed de roles e usu�rio admin
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();

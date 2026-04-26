@@ -1,0 +1,117 @@
+﻿@model ProjetoVendaPass.Models.ViewModels.DashboardClienteViewModel
+
+@{
+    ViewData["Title"] = "Dashboard do Cliente";
+}
+
+<h2 class="vp-page-title">📊 Dashboard do Cliente</h2>
+<div class="vp-client-meta">
+    <span>👤 <strong>@Model.NomeCliente</strong></span>
+    <span style="opacity:.4;">|</span>
+    <span>✉️ @Model.EmailCliente</span>
+</div>
+
+<!-- Cards de resumo -->
+<div class="row g-4 mb-5">
+
+    <div class="col-md-4">
+        <div class="vp-stat-card">
+            <div class="vp-stat-value info">@Model.TotalCompras</div>
+            <div class="vp-stat-label">🛒 Total de Compras</div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="vp-stat-card">
+            <div class="vp-stat-value success">R$ @Model.TotalGasto.ToString("F2")</div>
+            <div class="vp-stat-label">💰 Total Gasto</div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="vp-stat-card">
+            @if (Model.UltimaCompra != null)
+            {
+                <div class="vp-stat-value accent" style="font-size: 1.5rem;">
+                    @Model.UltimaCompra.Plano?.Nome
+                </div>
+                <div class="vp-stat-label" style="margin-bottom:.5rem;">
+                    @Model.UltimaCompra.DataCompra.ToString("dd/MM/yyyy HH:mm")
+                </div>
+                @if (Model.UltimaCompra.Status == ProjetoVendaPass.Models.StatusCompra.Pago)
+                {
+                    <span class="vp-badge vp-badge-success">✅ Pago</span>
+                }
+                else
+                {
+                    <span class="vp-badge vp-badge-pending">⏳ Pendente</span>
+                }
+                <div class="vp-stat-label" style="margin-top:.75rem;">📦 Última Compra</div>
+            }
+            else
+            {
+                <div class="vp-stat-value" style="font-size: 1.25rem; opacity:.6;">—</div>
+                <div class="vp-stat-label">📦 Nenhuma compra ainda</div>
+            }
+        </div>
+    </div>
+
+</div>
+
+<!-- Lista de compras -->
+<h4 class="vp-section-title">📋 Todas as Compras</h4>
+
+@if (!Model.ComprasRecentes.Any())
+{
+    <div class="vp-alert">Este cliente ainda não realizou nenhuma compra.</div>
+}
+else
+{
+    <div class="vp-table-wrap">
+        <table class="vp-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Plano</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th style="width: 1%; white-space: nowrap;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var compra in Model.ComprasRecentes)
+                {
+                    <tr>
+                        <td>@compra.Id</td>
+                        <td><strong>@compra.Plano?.Nome</strong></td>
+                        <td>R$ @compra.ValorPago.ToString("F2")</td>
+                        <td>@compra.DataCompra.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @if (compra.Status == ProjetoVendaPass.Models.StatusCompra.Pago)
+                            {
+                                <span class="vp-badge vp-badge-success">✅ Pago</span>
+                            }
+                            else
+                            {
+                                <span class="vp-badge vp-badge-pending">⏳ Pendente</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-controller="Admin"
+                               asp-action="DetalhesCompra"
+                               asp-route-id="@compra.Id"
+                               class="vp-btn vp-btn-sm">
+                                🔍 Ver
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div class="mt-4">
+    <a asp-action="Clientes" class="vp-btn vp-btn-ghost">← Voltar para Clientes</a>
+</div>

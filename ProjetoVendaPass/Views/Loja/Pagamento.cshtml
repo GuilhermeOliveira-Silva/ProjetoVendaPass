@@ -1,0 +1,60 @@
+﻿@model ProjetoVendaPass.Models.Compra
+
+@{
+    ViewData["Title"] = "Pagamento";
+}
+
+<div class="container py-4" style="max-width:560px;">
+
+    <div class="vp-payment-hero">
+        <div class="vp-payment-icon">💳</div>
+        <h1 style="color:#fff; font-weight:800; margin:0 0 .35rem;">Finalizar Pagamento</h1>
+        <p style="color:var(--vp-text-muted); margin:0;">
+            Revise seu pedido antes de confirmar.
+        </p>
+    </div>
+
+    <div class="vp-detail-card" style="margin-bottom:1.25rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,.06);">
+            <div>
+                <div style="font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--vp-text-muted); font-weight:700;">
+                    Pedido
+                </div>
+                <div style="color:#fff; font-weight:800; font-size:1.05rem;">#@Model.Id</div>
+            </div>
+            <span class="vp-badge vp-badge-warning">⏳ Pendente</span>
+        </div>
+
+        <div class="vp-detail-row">
+            <span class="vp-detail-label">Plano</span>
+            <span class="vp-detail-value">@Model.Plano?.Nome</span>
+        </div>
+        <div class="vp-detail-row">
+            <span class="vp-detail-label">Moedas</span>
+            <span class="vp-detail-value">🪙 @Model.Plano?.QuantidadeMoeda.ToString("N0")</span>
+        </div>
+        <div class="vp-detail-row">
+            <span class="vp-detail-label">Data</span>
+            <span class="vp-detail-value">@Model.DataCompra.ToString("dd/MM/yyyy HH:mm")</span>
+        </div>
+        <div class="vp-detail-row">
+            <span class="vp-detail-label">Valor Total</span>
+            <span class="vp-detail-value vp-highlight">R$ @Model.ValorPago.ToString("F2")</span>
+        </div>
+    </div>
+
+    <div class="vp-secure-note">
+        🔒 Ambiente de simulação — nenhum valor será realmente cobrado.
+    </div>
+
+    <form asp-action="ConfirmarPagamento" asp-route-id="@Model.Id" method="post" style="margin-bottom:.75rem;">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="vp-btn vp-btn-success vp-btn-lg vp-btn-block">
+            ✅ Confirmar Pagamento
+        </button>
+    </form>
+
+    <a asp-action="Index" class="vp-btn vp-btn-ghost vp-btn-block">
+        ← Cancelar e voltar à Loja
+    </a>
+</div>

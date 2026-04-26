@@ -1,0 +1,63 @@
+﻿@model ProjetoVendaPass.Models.ViewModels.AlterarSenhaViewModel
+
+@{
+    ViewData["Title"] = "Alterar Senha";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-5">
+
+        <h2 class="vp-page-title">🔒 Alterar Senha</h2>
+        <p class="vp-page-subtitle">Mantenha sua conta segura com uma senha forte.</p>
+
+        <div class="vp-card">
+
+            <form asp-action="AlterarSenha" method="post">
+                @Html.AntiForgeryToken()
+
+                <!-- Erros gerais -->
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+
+                <!-- Senha atual -->
+                <div class="vp-form-group">
+                    <label asp-for="SenhaAtual" class="vp-label">Senha Atual</label>
+                    <input asp-for="SenhaAtual" class="vp-input" />
+                    <span asp-validation-for="SenhaAtual" class="vp-error"></span>
+                </div>
+
+                <!-- Nova senha -->
+                <div class="vp-form-group">
+                    <label asp-for="NovaSenha" class="vp-label">Nova Senha</label>
+                    <input asp-for="NovaSenha" class="vp-input" />
+                    <span asp-validation-for="NovaSenha" class="vp-error"></span>
+                </div>
+
+                <!-- Confirmação -->
+                <div class="vp-form-group">
+                    <label asp-for="ConfirmarSenha" class="vp-label">Confirmar Nova Senha</label>
+                    <input asp-for="ConfirmarSenha" class="vp-input" />
+                    <span asp-validation-for="ConfirmarSenha" class="vp-error"></span>
+                </div>
+
+                <button type="submit" class="vp-btn vp-btn-danger vp-btn-block mt-2">
+                    🔒 Alterar Senha
+                </button>
+
+            </form>
+
+        </div>
+
+        <div class="mt-3">
+            <a asp-action="Index" class="vp-btn vp-btn-ghost">
+                ← Voltar para Minha Conta
+            </a>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

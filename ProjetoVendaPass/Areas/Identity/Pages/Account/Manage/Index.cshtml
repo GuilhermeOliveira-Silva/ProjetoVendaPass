@@ -1,0 +1,51 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Perfil";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<div class="vp-page-header">
+    <h3 class="vp-page-title">@ViewData["Title"]</h3>
+    <p class="vp-page-sub">Gerencie suas informações pessoais</p>
+</div>
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="vp-card vp-form-card">
+    @if (string.IsNullOrEmpty(Model.Input.DiscordId))
+    {
+        <div class="vp-alert vp-alert-warning">
+            ⚠️ Você precisa preencher seu <strong>Discord ID</strong> para continuar usando o sistema.
+        </div>
+    }
+
+    <form id="profile-form" method="post" class="vp-form">
+        <div asp-validation-summary="ModelOnly" class="vp-alert vp-alert-danger" role="alert"></div>
+
+        <div class="vp-field">
+            <label asp-for="Username" class="vp-label"></label>
+            <input asp-for="Username" class="vp-input" placeholder="Username" disabled />
+        </div>
+
+        <div class="vp-field">
+            <label asp-for="Input.Nome" class="vp-label"></label>
+            <input asp-for="Input.Nome" class="vp-input" placeholder="Seu nome completo" />
+            <span asp-validation-for="Input.Nome" class="vp-error"></span>
+        </div>
+
+        <div class="vp-field">
+            <label asp-for="Input.DiscordId" class="vp-label"></label>
+            <input asp-for="Input.DiscordId" class="vp-input" placeholder="Seu Discord ID" />
+            <span asp-validation-for="Input.DiscordId" class="vp-error"></span>
+        </div>
+
+        <button id="update-profile-button" type="submit" class="vp-btn vp-btn-primary vp-btn-block">
+            Salvar alterações
+        </button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

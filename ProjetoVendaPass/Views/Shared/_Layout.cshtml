@@ -1,56 +1,93 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ProjetoVendaPass</title>
+    <title>@ViewData["Title"] - VendaPass</title>
     <script type="importmap"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ProjetoVendaPass.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjetoVendaPass</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+    @using Microsoft.AspNetCore.Identity
+    @inject SignInManager<ProjetoVendaPass.Models.ApplicationUser> SignInManager
+
+    <header class="vp-header">
+        <nav class="navbar navbar-expand-lg vp-navbar">
+            <div class="container-fluid px-lg-5">
+                <a class="navbar-brand vp-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="vp-brand-mark">V</span>
+                    <span class="vp-brand-text">Venda<span class="vp-accent">Pass</span></span>
+                </a>
+                <button class="navbar-toggler vp-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
+                    <ul class="navbar-nav vp-nav mx-lg-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link vp-link" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Loja" asp-action="Index">🛒 Loja</a>
+                            <a class="nav-link vp-link" asp-controller="Loja" asp-action="Index">Loja</a>
                         </li>
-                        @inject Microsoft.AspNetCore.Identity.SignInManager<ProjetoVendaPass.Models.ApplicationUser> SignInManager
+
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Cliente" asp-action="Dashboard">📊 Meu Dashboard</a>
+                                <a class="nav-link vp-link" asp-controller="Conta" asp-action="Dashboard">Dashboard</a>
                             </li>
                         }
 
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link vp-link vp-link-admin" asp-controller="Admin" asp-action="Index">Admin</a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    <main role="main" class="vp-main">
+        @RenderBody()
+    </main>
+
+    <footer class="vp-footer">
         <div class="container">
-            &copy; 2026 - ProjetoVendaPass - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="vp-footer-grid">
+                <div>
+                    <div class="vp-brand mb-2">
+                        <span class="vp-brand-mark">V</span>
+                        <span class="vp-brand-text">Venda<span class="vp-accent">Pass</span></span>
+                    </div>
+                    <p class="vp-footer-text">A forma mais rápida e segura de comprar passes de jogos.</p>
+                </div>
+                <div>
+                    <h6 class="vp-footer-title">Loja</h6>
+                    <a asp-controller="Loja" asp-action="Index">Catálogo</a>
+                    <a asp-controller="Home" asp-action="Index">Lançamentos</a>
+                </div>
+                <div>
+                    <h6 class="vp-footer-title">Suporte</h6>
+                    <a asp-controller="Home" asp-action="Privacy">Privacidade</a>
+                    <a href="#">Contato</a>
+                </div>
+            </div>
+            <div class="vp-footer-bottom">
+                &copy; 2026 VendaPass — Todos os direitos reservados.
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

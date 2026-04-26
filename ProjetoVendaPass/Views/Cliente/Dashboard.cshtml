@@ -81,6 +81,7 @@ else
                         <td>@compra.Plano?.Nome</td>
                         <td>@compra.DataCompra.ToString("dd/MM/yyyy HH:mm")</td>
                         <td class="text-success fw-bold">R$ @compra.ValorPago.ToString("F2")</td>
+
                         <td>
                             @if (compra.Status == ProjetoVendaPass.Models.StatusCompra.Pago)
                             {
@@ -88,7 +89,15 @@ else
                             }
                             else
                             {
-                                <span class="badge bg-warning text-dark">⏳ Pendente</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-warning text-dark">⏳ Pendente</span>
+                                    <a asp-controller="Loja"
+                                       asp-action="Pagamento"
+                                       asp-route-id="@compra.Id"
+                                       class="btn btn-sm btn-outline-warning">
+                                        Finalizar
+                                    </a>
+                                </div>
                             }
                         </td>
                     </tr>

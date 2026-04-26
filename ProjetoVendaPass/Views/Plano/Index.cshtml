@@ -4,33 +4,70 @@
     ViewData["Title"] = "Planos";
 }
 
-<h2>Planos</h2>
+<div class="container py-4">
 
-<a asp-action="Create" class="btn btn-primary mb-3">+ Novo Plano</a>
+    <div class="vp-section-head">
+        <div>
+            <h1>🎮 Gerenciar Planos</h1>
+            <div class="vp-section-sub">Cadastre, edite e controle os passes disponíveis na loja.</div>
+        </div>
+        <a asp-action="Create" class="vp-btn vp-btn-primary">
+            <span style="font-size:1.1rem; line-height:1;">＋</span> Novo Plano
+        </a>
+    </div>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Preço</th>
-            <th>Quantidade de Moedas</th>
-            <th>Ativo</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var plano in Model)
-        {
-            <tr>
-                <td>@plano.Nome</td>
-                <td>R$ @plano.Preco.ToString("F2")</td>
-                <td>@plano.QuantidadeMoeda.ToString("N0")</td>
-                <td>@(plano.Ativo ? "Sim" : "Não")</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@plano.Id" class="btn btn-sm btn-warning">Editar</a>
-                    <a asp-action="Delete" asp-route-id="@plano.Id" class="btn btn-sm btn-danger">Excluir</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="vp-alert vp-alert-success">✅ @TempData["Sucesso"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="vp-empty-state">
+            <div class="vp-empty-icon">📦</div>
+            <h3>Nenhum plano cadastrado</h3>
+            <p>Crie seu primeiro plano para começar a vender.</p>
+            <a asp-action="Create" class="vp-btn vp-btn-primary">＋ Criar Plano</a>
+        </div>
+    }
+    else
+    {
+        <div class="vp-table-wrap">
+            <table class="vp-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Preço</th>
+                        <th>Moedas</th>
+                        <th>Status</th>
+                        <th class="vp-th-actions">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var plano in Model)
+                    {
+                        <tr>
+                            <td><strong style="color:#fff;">@plano.Nome</strong></td>
+                            <td><span style="color:var(--vp-accent); font-weight:700;">R$ @plano.Preco.ToString("F2")</span></td>
+                            <td>🪙 @plano.QuantidadeMoeda.ToString("N0")</td>
+                            <td>
+                                @if (plano.Ativo)
+                                {
+                                    <span class="vp-badge vp-badge-success">● Ativo</span>
+                                }
+                                else
+                                {
+                                    <span class="vp-badge vp-badge-muted">○ Inativo</span>
+                                }
+                            </td>
+                            <td class="vp-td-actions">
+                                <a asp-action="Edit" asp-route-id="@plano.Id" class="vp-btn vp-btn-ghost vp-btn-sm">✏️ Editar</a>
+                                <a asp-action="Delete" asp-route-id="@plano.Id" class="vp-btn vp-btn-danger vp-btn-sm">🗑 Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

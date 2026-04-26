@@ -1,8 +1,87 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="vp-hero">
+    <div class="vp-hero-inner">
+        <span class="vp-pill">
+            <span class="vp-pill-dot"></span>
+            Plataforma oficial de passes de jogos
+        </span>
+        <h1>
+            Seu próximo <span class="vp-accent">game pass</span><br />
+            entregue em segundos.
+        </h1>
+        <p class="lead">
+            Compre passes, créditos e cartões de jogos com pagamento seguro,
+            entrega instantânea e o melhor preço do mercado.
+        </p>
+        <div class="vp-cta-row">
+            <a asp-controller="Loja" asp-action="Index" class="vp-btn vp-btn-primary">
+                Explorar Loja →
+            </a>
+            <a asp-controller="Home" asp-action="Privacy" class="vp-btn vp-btn-ghost">
+                Como funciona
+            </a>
+        </div>
+    </div>
+
+    <div class="vp-stats">
+        <div class="vp-stat">
+            <div class="vp-stat-num">+50k</div>
+            <div class="vp-stat-label">Clientes ativos</div>
+        </div>
+        <div class="vp-stat">
+            <div class="vp-stat-num">99.9%</div>
+            <div class="vp-stat-label">Entregas no prazo</div>
+        </div>
+        <div class="vp-stat">
+            <div class="vp-stat-num">24/7</div>
+            <div class="vp-stat-label">Suporte ativo</div>
+        </div>
+        <div class="vp-stat">
+            <div class="vp-stat-num">100%</div>
+            <div class="vp-stat-label">Pagamento seguro</div>
+        </div>
+    </div>
+</section>
+
+<section class="vp-section">
+    <div class="vp-section-head">
+        <h2>Por que escolher a <span class="vp-accent">VendaPass</span>?</h2>
+        <p>Tudo que você precisa para comprar com confiança e receber na hora.</p>
+    </div>
+
+    <div class="vp-grid-3">
+        <div class="vp-card">
+            <div class="vp-card-icon">⚡</div>
+            <h3>Entrega instantânea</h3>
+            <p>Receba seu código ou pass no e-mail em segundos após a confirmação do pagamento.</p>
+        </div>
+        <div class="vp-card">
+            <div class="vp-card-icon">🔒</div>
+            <h3>Pagamento blindado</h3>
+            <p>Transações criptografadas e processadas pelas maiores gateways do mercado.</p>
+        </div>
+        <div class="vp-card">
+            <div class="vp-card-icon">💎</div>
+            <h3>Melhor preço garantido</h3>
+            <p>Acompanhamos o mercado em tempo real para te oferecer sempre o valor mais competitivo.</p>
+        </div>
+        <div class="vp-card">
+            <div class="vp-card-icon">🎮</div>
+            <h3>Catálogo completo</h3>
+            <p>Passes, créditos e cartões dos seus jogos favoritos — tudo num só lugar.</p>
+        </div>
+        <div class="vp-card">
+            <div class="vp-card-icon">💬</div>
+            <h3>Suporte 24/7</h3>
+            <p>Atendimento humano e rápido sempre que você precisar, todos os dias da semana.</p>
+        </div>
+        <div class="vp-card">
+            <div class="vp-card-icon">⭐</div>
+            <h3>Avaliado pelos gamers</h3>
+            <p>Mais de 50 mil clientes satisfeitos e avaliações reais comprovando nossa qualidade.</p>
+        </div>
+    </div>
+</section>

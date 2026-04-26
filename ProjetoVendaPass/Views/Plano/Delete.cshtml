@@ -4,27 +4,57 @@
     ViewData["Title"] = "Excluir Plano";
 }
 
-<h2>Confirmar Exclusão</h2>
+<div class="container py-4" style="max-width:620px;">
 
-<p>Tem certeza que deseja excluir o plano <strong>@Model.Nome</strong>?</p>
+    <div class="vp-page-header">
+        <h1 style="color:#fff; font-weight:800; margin:0;">🗑 Excluir Plano</h1>
+        <div style="color:var(--vp-text-muted); margin-top:.35rem;">
+            Esta ação não poderá ser desfeita.
+        </div>
+    </div>
 
-<dl class="row">
-    <dt class="col-sm-3">Nome</dt>
-    <dd class="col-sm-9">@Model.Nome</dd>
+    <div class="vp-danger-zone">
+        <div class="vp-danger-icon">⚠️</div>
+        <h3 style="color:#fff; font-weight:700; margin:0 0 .5rem;">
+            Tem certeza que deseja excluir <span style="color:#fca5a5;">@Model.Nome</span>?
+        </h3>
+        <p style="color:#cfcfd6; margin:0 0 1.25rem;">
+            Confirme os dados do plano antes de prosseguir.
+        </p>
 
-    <dt class="col-sm-3">Preço</dt>
-    <dd class="col-sm-9">R$ @Model.Preco.ToString("F2")</dd>
+        <div class="vp-detail-card" style="background:rgba(0,0,0,.25); border-color:rgba(255,255,255,.05); margin-bottom:1.25rem;">
+            <div class="vp-detail-row">
+                <span class="vp-detail-label">Nome</span>
+                <span class="vp-detail-value">@Model.Nome</span>
+            </div>
+            <div class="vp-detail-row">
+                <span class="vp-detail-label">Preço</span>
+                <span class="vp-detail-value vp-highlight">R$ @Model.Preco.ToString("F2")</span>
+            </div>
+            <div class="vp-detail-row">
+                <span class="vp-detail-label">Moedas</span>
+                <span class="vp-detail-value">🪙 @Model.QuantidadeMoeda.ToString("N0")</span>
+            </div>
+            <div class="vp-detail-row">
+                <span class="vp-detail-label">Status</span>
+                <span class="vp-detail-value">
+                    @if (Model.Ativo)
+                    {
+                        <span class="vp-badge vp-badge-success">● Ativo</span>
+                    }
+                    else
+                    {
+                        <span class="vp-badge vp-badge-muted">○ Inativo</span>
+                    }
+                </span>
+            </div>
+        </div>
 
-    <dt class="col-sm-3">Quantidade de Moedas</dt>
-    <dd class="col-sm-9">@Model.QuantidadeMoeda.ToString("N0")</dd>
-
-    <dt class="col-sm-3">Ativo</dt>
-    <dd class="col-sm-9">@(Model.Ativo ? "Sim" : "Não")</dd>
-</dl>
-
-<form asp-action="Delete" method="post">
-    @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+        <form asp-action="Delete" method="post" style="display:flex; gap:.75rem; flex-wrap:wrap;">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="vp-btn vp-btn-danger">🗑 Confirmar Exclusão</button>
+            <a asp-action="Index" class="vp-btn vp-btn-ghost">← Cancelar</a>
+        </form>
+    </div>
+</div>
