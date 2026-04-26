@@ -1,47 +1,108 @@
-﻿@model IEnumerable<ProjetoVendaPass.Models.ApplicationUser>
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model X.PagedList.IPagedList<ProjetoVendaPass.Models.ApplicationUser>
 
 @{
     ViewData["Title"] = "Clientes";
+    var filtroBusca = (string?)ViewBag.FiltroBusca ?? string.Empty;
 }
 
 <h2 class="vp-page-title">👥 Clientes Cadastrados</h2>
-<p class="vp-page-subtitle">Gerencie e acompanhe todos os clientes da plataforma.</p>
+<p class="vp-page-subtitle">Gerencie e encontre clientes rapidamente.</p>
 
-@if (!Model.Any())
-{
-    <div class="vp-alert">Nenhum cliente cadastrado ainda.</div>
-}
-else
-{
-    <div class="vp-table-wrap">
-        <table class="vp-table">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th style="width: 1%; white-space: nowrap;"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var cliente in Model)
-                {
-                    <tr>
-                        <td><strong>@cliente.Nome</strong></td>
-                        <td>@cliente.Email</td>
-                        <td>
-                            <a asp-action="DashboardCliente"
-                               asp-route-id="@cliente.Id"
-                               class="vp-btn vp-btn-sm">
-                                📊 Ver Dashboard
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div class="vp-card vp-admin-sales-panel mb-4">
+    <div class="vp-admin-sales-panel__head">
+        <div>
+            <h4 class="vp-admin-sales-panel__title">🔎Busca de Clientes</h4>
+            <p class="vp-admin-sales-panel__sub">Pesquise por nome, e-mail ou Discord ID no mesmo painel da listagem.</p>
+        </div>
+
+        @if (Model.TotalItemCount > 0)
+        {
+            <span class="vp-badge vp-badge-muted">
+                @Model.TotalItemCount cliente(s) — página @Model.PageNumber de @Model.PageCount
+            </span>
+        }
     </div>
-}
 
-<div class="mt-4">
-    <a asp-action="Index" class="vp-btn vp-btn-ghost">← Voltar ao Dashboard</a>
+    <form asp-action="Clientes" method="get" class="vp-admin-sales-panel__filters">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-8">
+                <label class="vp-label">Buscar cliente</label>
+                <input type="text"
+                       name="filtroBusca"
+                       value="@filtroBusca"
+                       class="vp-input"
+                       placeholder="Nome, email ou Discord ID..." />
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <button type="submit" class="vp-btn vp-btn-primary w-100">
+                    Buscar
+                </button>
+                <a asp-action="Clientes" class="vp-btn w-100">
+                    Limpar
+                </a>
+            </div>
+        </div>
+    </form>
+
+    <div class="vp-admin-sales-panel__divider"></div>
+
+    @if (!Model.Any())
+    {
+        <div class="vp-alert">Nenhum cliente encontrado com os filtros aplicados.</div>
+    }
+    else
+    {
+        <div class="vp-table-wrap">
+            <table class="vp-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Discord ID</th>
+                        <th style="width: 1%; white-space: nowrap;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cliente in Model)
+                    {
+                        <tr>
+                            <td>@cliente.Nome</td>
+                            <td>@cliente.Email</td>
+                            <td>@(string.IsNullOrEmpty(cliente.DiscordId) ? "—" : cliente.DiscordId)</td>
+                            <td>
+                                <a asp-action="DashboardCliente"
+                                   asp-route-id="@cliente.Id"
+                                   class="vp-btn vp-btn-sm">
+                                    📊 Ver Dashboard
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-center mt-3">
+            @Html.PagedListPager(Model, pagina => Url.Action("Clientes", new
+            {
+                pagina,
+                filtroBusca = filtroBusca
+                }),
+                new PagedListRenderOptions
+                {
+                    LiElementClasses = new[] { "page-item" },
+                    PageClasses = new[] { "page-link" },
+                    UlElementClasses = new[] { "pagination" },
+                    ActiveLiElementClass = "active",
+                    DisplayLinkToFirstPage = PagedListDisplayMode.Never,
+                    DisplayLinkToLastPage = PagedListDisplayMode.Never
+                })
+    </div>
+        }
+</div>
+
+<div class="mt-3">
+    <a asp-action="Index" class="vp-btn">← Voltar ao Dashboard</a>
 </div>

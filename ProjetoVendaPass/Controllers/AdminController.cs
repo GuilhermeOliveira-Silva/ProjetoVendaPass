@@ -23,7 +23,7 @@ namespace ProjetoVendaPass.Controllers
         }
 
         // GET: /Admin
-        public async Task<IActionResult> Index(
+       public async Task<IActionResult> Index(
      string? filtroCliente,
      string? filtroStatus,
      DateTime? filtroDataInicio,
@@ -122,12 +122,30 @@ namespace ProjetoVendaPass.Controllers
         }
 
         // GET: /Admin/Clientes
-        public async Task<IActionResult> Clientes()
+        public async Task<IActionResult> Clientes(string? filtroBusca, int pagina = 1)
         {
-            // Busca apenas usuários com role "Cliente"
             var clientes = await _userManager.GetUsersInRoleAsync("Cliente");
 
-            return View(clientes);
+            // Aplica filtro de busca
+            var resultado = clientes.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filtroBusca))
+            {
+                var busca = filtroBusca.ToLower();
+                resultado = resultado.Where(c =>
+                    (c.Nome != null && c.Nome.ToLower().Contains(busca)) ||
+                    (c.Email != null && c.Email.ToLower().Contains(busca)) ||
+                    (c.DiscordId != null && c.DiscordId.ToLower().Contains(busca)));
+            }
+
+            // Ordena por nome
+            var clientesOrdenados = resultado
+                .OrderBy(c => c.Nome)
+                .ToPagedList(pagina, 10);
+
+            ViewBag.FiltroBusca = filtroBusca;
+
+            return View(clientesOrdenados);
         }
     }
 }
